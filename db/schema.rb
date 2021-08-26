@@ -10,10 +10,91 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_25_012857) do
+ActiveRecord::Schema.define(version: 2021_08_26_040324) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "accounts", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "organization_id", null: false
+    t.integer "role"
+    t.boolean "active"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "index_accounts_on_organization_id"
+    t.index ["user_id"], name: "index_accounts_on_user_id"
+  end
+
+  create_table "chats", force: :cascade do |t|
+    t.jsonb "chat_data"
+    t.bigint "lead_id", null: false
+    t.bigint "account_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["account_id"], name: "index_chats_on_account_id"
+    t.index ["lead_id"], name: "index_chats_on_lead_id"
+  end
+
+  create_table "leads", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "phone"
+    t.bigint "stage_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["stage_id"], name: "index_leads_on_stage_id"
+  end
+
+  create_table "notes", force: :cascade do |t|
+    t.text "content"
+    t.bigint "chat_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["chat_id"], name: "index_notes_on_chat_id"
+  end
+
+  create_table "organizations", force: :cascade do |t|
+    t.string "name"
+    t.string "phone"
+    t.string "address"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "pipelines", force: :cascade do |t|
+    t.string "name"
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "index_pipelines_on_organization_id"
+  end
+
+  create_table "profiles", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.text "photo_url"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_profiles_on_user_id"
+  end
+
+  create_table "setups", force: :cascade do |t|
+    t.string "domain"
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "index_setups_on_organization_id"
+  end
+
+  create_table "stages", force: :cascade do |t|
+    t.string "name"
+    t.bigint "pipeline_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["pipeline_id"], name: "index_stages_on_pipeline_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -29,4 +110,14 @@ ActiveRecord::Schema.define(version: 2021_08_25_012857) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "accounts", "organizations"
+  add_foreign_key "accounts", "users"
+  add_foreign_key "chats", "accounts"
+  add_foreign_key "chats", "leads"
+  add_foreign_key "leads", "stages"
+  add_foreign_key "notes", "chats"
+  add_foreign_key "pipelines", "organizations"
+  add_foreign_key "profiles", "users"
+  add_foreign_key "setups", "organizations"
+  add_foreign_key "stages", "pipelines"
 end
