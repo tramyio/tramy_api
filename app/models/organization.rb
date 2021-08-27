@@ -6,4 +6,6 @@ class Organization < ApplicationRecord
   has_many :pipelines
 
   validates :phone_number, uniqueness: true
+
+  # TODO: Restrict organization to max 3 accounts
 end
