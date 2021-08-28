@@ -11,4 +11,15 @@ class User < ApplicationRecord
 
   has_one :profile
   has_one :account
+
+  after_commit :create_then_associate_profile, on: :create
+  after_commit :create_then_associate_account, on: :create
+
+  def create_then_associate_profile
+    Profile.create(user: self)
+  end
+
+  def create_then_associate_account
+    Account.create(user: self)
+  end
 end
