@@ -4,7 +4,7 @@ class CreateLeads < ActiveRecord::Migration[6.0]
       t.string :name
       t.string :email
       t.string :phone
-      t.references :stage, null: false, foreign_key: true
+      t.references :stage, null: true, foreign_key: true
 
       t.timestamps
     end
