@@ -27,4 +27,4 @@ Things you may want to cover:
 
 ## ActiveRecord
 
-- Follow the order: associations, belongs_to, callbacks, validations.
+- Follow the order: associations, belongs_to, validations, callbacks.
