@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
 class Chat < ApplicationRecord
-  # If the chat is destroyed, consequently the notes also.
-  has_many :notes, dependent: :destroy
+  has_many :notes, dependent: :destroy # If the chat is destroyed, consequently the notes also.
 
   belongs_to :lead
+  belongs_to :account, optional: true # When chat is not assigned to an agent
 
-  # When chat is not assigned to an agent
-  belongs_to :account, optional: true
+  scope :recently_updated, -> { order(updated_at: :desc) }
 
   after_commit :add_creation_note, on: :create
 
