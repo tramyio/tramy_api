@@ -32,3 +32,4 @@ Things you may want to cover:
 ## ActiveRecord
 
 - Follow the order: associations, validations, scopes, callbacks.
+- For printing queries in rails console, after throwing a search, type: ap \_ to see a friendly result (development-only)
