@@ -10,4 +10,11 @@ Rails.application.routes.draw do
     sessions: 'users/sessions',
     registrations: 'users/registrations'
   }
+
+  resources :chats, only: %i[index show create update]
+  resources :leads, only: %i[index show create update]
+
+  namespace :hookdeck do
+    post 'messages/webhook'
+  end
 end
