@@ -13,7 +13,7 @@ class Lead < ApplicationRecord
   after_commit :create_then_associate_chat, on: :create
 
   def create_then_associate_chat
-    Chat.create(lead: self)
+    Chat.create(lead: self, chat_data: { "messages": [] })
   end
 
   def assigned_account
