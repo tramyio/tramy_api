@@ -21,5 +21,8 @@ module Hookdeck
     def message_hook
       params.dig(:messages, 0).to_unsafe_h
     end
+
+    # TODO: Check if incoming payload include messages' keys, then execute incoming webhooks logic
+    # TODO: Check if incoming payload include statuses' keys, then execute status webhook logic
   end
 end
