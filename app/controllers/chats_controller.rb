@@ -42,6 +42,28 @@ class ChatsController < ApplicationController
   #   @chat.destroy
   # end
 
+  def create_message(phone = '51972186137', message = 'Hola, mi nombre es Deyvi')
+    lead = Lead.find_by(phone: phone)
+    response = HTTParty.post(
+      'https://waba-sandbox.360dialog.io/v1/messages',
+      headers: { 'Content-Type' => 'application/json', 'D360-API-KEY' => 'aDlgxf_sandbox' },
+      body: {
+        "recipient_type": 'individual',
+        "to": phone,
+        "type": 'text',
+        "text": {
+          "body": message
+        }
+      }.to_json
+    )
+
+    if response.code.eql? 201
+      tramy_account_message = { "from": phone, "type": 'text', "text": { "body": message } }
+      lead.chat.chat_data['messages'] << tramy_account_message
+      lead.chat.save
+    end
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.

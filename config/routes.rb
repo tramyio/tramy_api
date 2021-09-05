@@ -17,4 +17,6 @@ Rails.application.routes.draw do
   namespace :hookdeck do
     post 'messages/webhook'
   end
+
+  post 'message', to: 'chats#create_message'
 end
