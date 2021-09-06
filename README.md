@@ -25,6 +25,11 @@ Things you may want to cover:
 
 # Tramy's guidelines:
 
+## ActionController
+
+- Add a brief description if the method becomes complex
+
 ## ActiveRecord
 
-- Follow the order: associations, belongs_to, callbacks, validations.
+- Follow the order: associations, validations, scopes, callbacks.
+- For printing queries in rails console, after throwing a search, type: ap \_ to see a friendly result (development-only)

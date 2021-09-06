@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Organization < ApplicationRecord
+  # TODO: Restrict organization to max 3 accounts
   has_one :setup
   has_many :accounts
   has_many :pipelines
@@ -12,6 +13,4 @@ class Organization < ApplicationRecord
   def create_then_associate_setup
     Setup.create(organization: self)
   end
-  
-  # TODO: Restrict organization to max 3 accounts
 end

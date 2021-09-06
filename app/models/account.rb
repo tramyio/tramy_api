@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Account < ApplicationRecord
+  # TODO: Define roles for Account model (https://github.com/tramyio/tramy_api/issues/3)
+  # TODO: Define condition for account.active = false (Payment? Banished?)
   has_many :chats
 
   belongs_to :user
@@ -8,13 +10,9 @@ class Account < ApplicationRecord
   # When the account does not belong to any organization
   belongs_to :organization, optional: true
 
-  after_initialize :activate_account
-
   validates :active, inclusion: [true, false]
 
-  def activate_account
-    self.active = true if (has_attribute? :bool_value) && active.nil?
+  def activate
+    self.active = true
   end
-  # TODO: Define roles for Account model (https://github.com/tramyio/tramy_api/issues/3)
-  # TODO: Define condition for account.active = false (Payment? Banished?)
 end

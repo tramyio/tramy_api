@@ -9,8 +9,10 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :validatable,
          :jwt_authenticatable, jwt_revocation_strategy: self
 
-  has_one :profile
-  has_one :account
+  has_one :profile, dependent: :destroy
+  has_one :account, dependent: :destroy
+
+  validates :email, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   after_commit :create_then_associate_profile, on: :create
   after_commit :create_then_associate_account, on: :create
@@ -20,6 +22,6 @@ class User < ApplicationRecord
   end
 
   def create_then_associate_account
-    Account.create(user: self)
+    Account.create(user: self, active: false)
   end
 end
