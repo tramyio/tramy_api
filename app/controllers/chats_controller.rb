@@ -43,7 +43,6 @@ class ChatsController < ApplicationController
   # end
 
   def create_message(phone = '51972186137', message = 'Hola, mi nombre es Deyvi')
-    lead = Lead.find_by(phone: phone)
     response = HTTParty.post(
       'https://waba-sandbox.360dialog.io/v1/messages',
       headers: { 'Content-Type' => 'application/json', 'D360-API-KEY' => 'aDlgxf_sandbox' },
@@ -58,6 +57,7 @@ class ChatsController < ApplicationController
     )
 
     if response.code.eql? 201
+      lead = Lead.find_by(phone: phone)
       tramy_account_message = { "from": phone, "type": 'text', "text": { "body": message } }
       lead.chat.chat_data['messages'] << tramy_account_message
       lead.chat.save
