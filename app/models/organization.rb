@@ -6,7 +6,7 @@ class Organization < ApplicationRecord
   has_many :accounts
   has_many :pipelines
 
-  validates :phone_number, uniqueness: true
+  validates :phone, uniqueness: true
 
   after_commit :create_then_associate_setup, on: :create
 
