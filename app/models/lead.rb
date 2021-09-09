@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Lead < ApplicationRecord
+  # TODO: Allow same lead can send message to many organizations (scope phone unique by each organization)
   has_one :chat, dependent: :destroy # If the lead is destroyed, consequently the chat also.
 
   belongs_to :stage, optional: true # For recently created lead (non-assigned)
