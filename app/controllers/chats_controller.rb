@@ -49,11 +49,11 @@ class ChatsController < ApplicationController
       headers: { 'Content-Type': 'application/json',
                  'D360-API-KEY': @organization.provider_api_key },
       body: {
-        'recipient_type': 'individual',
-        'to': @chat.lead.phone,
-        'type': 'text' || params[:type],
-        'text': {
-          'body': params[:message]
+        recipient_type: 'individual',
+        to: @chat.lead.phone,
+        type: 'text' || params[:type],
+        text: {
+          body: params[:message]
         }
       }.to_json
     )
