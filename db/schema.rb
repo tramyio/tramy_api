@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(version: 2021_08_26_040324) do
     t.string "name"
     t.string "phone"
     t.string "address"
+    t.string "provider_api_key"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

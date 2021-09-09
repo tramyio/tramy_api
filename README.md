@@ -33,3 +33,24 @@ Things you may want to cover:
 
 - Follow the order: associations, validations, scopes, callbacks.
 - For printing queries in rails console, after throwing a search, type: ap \_ to see a friendly result (development-only)
+
+## How to install Tramy's local enviroment:
+
+### Install
+
+- Clone this repository
+- Install have Ruby 2.7.2 and Rails 6.0.4
+- Then run the following command `bundle install`
+
+### Port
+
+- Expose one of your ports, usually port 3000 for API (We suggest you to use Ngrok or Localtunnel)
+- Paste your your_exposed_port_url in `development.rb` at the end of the file and paste config.hosts << "your_exposed_port_url"
+
+### Providers
+
+- Create an account in Hookdeck (Ask for your team access to your manager)
+- Enter Hookdeck, setup a connection source (360dialog) and destination (your Ngrok/Localtunnel url)
+- Setup webhook url in https://waba-sandbox.360dialog.io/v1/configs/webhook and pass as body payload { "url": "your_hookdeck_event_url?number=xxxxxxxxxxxx" }
+
+### You're ready to code

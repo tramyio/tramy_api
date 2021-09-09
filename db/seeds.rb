@@ -17,6 +17,21 @@ if Rails.env.development?
     { name: 'Luisa Rodriguez', phone: '51987654321' }
   ]
 
+  org = Organization.create(name: 'Disoft', phone: '51999666333', provider_api_key: 'aDlgxf_sandbox')
+
+  pipe = Pipeline.create(name: 'Clientes', organization: org)
+
+  stages = [
+    { name: 'Nuevo lead' },
+    { name: 'Llamada agendada' },
+    { name: 'Cotizacion' },
+    { name: 'Pagado' }
+  ]
+
+  stages.each do |stage|
+    Stage.create(name: stage[:name], pipeline: pipe)
+  end
+
   # Seeder
   puts 'Tramy is planting seeds for users'
   users.each do |user|
@@ -27,4 +42,7 @@ if Rails.env.development?
   leads.each do |lead|
     Lead.create(name: lead[:name], phone: lead[:phone])
   end
+
+  puts 'Tramy is planting seeds for stages'
+  stages
 end
