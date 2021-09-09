@@ -18,5 +18,5 @@ Rails.application.routes.draw do
     post 'messages/webhook'
   end
 
-  post 'message', to: 'chats#create_message'
+  patch 'chats/:id/new_message', to: 'chats#new_message'
 end

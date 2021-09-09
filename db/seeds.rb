@@ -17,7 +17,7 @@ if Rails.env.development?
     { name: 'Luisa Rodriguez', phone: '51987654321' }
   ]
 
-  org = Organization.create(name: 'Disoft', phone: '51999666333')
+  org = Organization.create(name: 'Disoft', phone: '51999666333', provider_api_key: 'aDlgxf_sandbox')
 
   pipe = Pipeline.create(name: 'Clientes', organization: org)
 
