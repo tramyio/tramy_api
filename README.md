@@ -53,4 +53,9 @@ Things you may want to cover:
 - Enter Hookdeck, setup a connection source (360dialog) and destination (your Ngrok/Localtunnel url)
 - Setup webhook url in https://waba-sandbox.360dialog.io/v1/configs/webhook and pass as body payload { "url": "your_hookdeck_event_url?number=xxxxxxxxxxxx" }
 
+### Heroku
+
+- Ask your manager for access
+- In order to avoid rewriting the app name every time you hit a command, just run this: heroku git:remote -a tramyback
+
 ### You're ready to code
