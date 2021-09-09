@@ -2,7 +2,10 @@
 
 module Hookdeck
   class MessagesController < ApplicationController
+    # Only trigger webhook if includes 'appropiate keys', otherwise should be skipped
     def webhook
+      return if params.key?(:statuses) # Skip temporarily statuses
+
       lead = Lead.where(phone: phone_hook)
                  .first_or_create(phone: phone_hook, name: name_hook)
       lead.chat.chat_data['messages'] << message_hook
