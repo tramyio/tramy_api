@@ -2,6 +2,7 @@
 
 module Users
   class RegistrationsController < Devise::RegistrationsController
+    skip_before_action :authenticate_user!
     respond_to :json
 
     private
