@@ -14,8 +14,7 @@ class ChatsController < ApplicationController
   # GET /chats
   def index
     @chats = Chat.recently_updated
-
-    render json: @chats
+    render json: ChatSerializer.new(@chats).serializable_hash[:data], status: :ok
   end
 
   # GET /chats/1
