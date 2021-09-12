@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_12_025439) do
+ActiveRecord::Schema.define(version: 2021_09_12_165557) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,8 @@ ActiveRecord::Schema.define(version: 2021_09_12_025439) do
     t.bigint "stage_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "organization_id", null: false
+    t.index ["organization_id"], name: "index_leads_on_organization_id"
     t.index ["stage_id"], name: "index_leads_on_stage_id"
   end
 
@@ -109,6 +111,7 @@ ActiveRecord::Schema.define(version: 2021_09_12_025439) do
   add_foreign_key "accounts", "users"
   add_foreign_key "chats", "accounts"
   add_foreign_key "chats", "leads"
+  add_foreign_key "leads", "organizations"
   add_foreign_key "leads", "stages"
   add_foreign_key "notes", "chats"
   add_foreign_key "pipelines", "organizations"

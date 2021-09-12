@@ -17,7 +17,7 @@ leads = [
   { name: 'Luisa Rodriguez', phone: '51987654321' }
 ]
 
-org = Organization.create(name: 'Disoft', phone: '51999666333', provider_api_key: 'aDlgxf_sandbox')
+org = Organization.create(name: 'ACME', phone: '51999666333', provider_api_key: 'aDlgxf_sandbox')
 
 pipe = Pipeline.create(name: 'Clientes', organization: org)
 
@@ -38,9 +38,9 @@ users.each do |user|
   User.create(email: user[:email], password: user[:password])
 end
 
-puts 'Tramy is planting seeds for leads'
+# puts 'Tramy is planting seeds for leads'
 leads.each do |lead|
-  Lead.create(name: lead[:name], phone: lead[:phone])
+  Lead.create(name: lead[:name], phone: lead[:phone], organization_id: org.id)
 end
 
 puts 'Tramy is planting seeds for stages'
