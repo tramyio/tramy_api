@@ -12,6 +12,6 @@ class ChatSerializer
   end
 
   attributes :attended_by do |object|
-    object.account.user.profile
+    object&.account&.user&.profile
   end
 end
