@@ -4,6 +4,7 @@ class CreateOrganizations < ActiveRecord::Migration[6.0]
       t.string :name
       t.string :phone
       t.string :address
+      t.string :domain
       t.string :provider_api_key
 
       t.timestamps

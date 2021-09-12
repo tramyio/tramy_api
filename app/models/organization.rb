@@ -8,10 +8,4 @@ class Organization < ApplicationRecord
   has_many :pipelines
 
   validates :phone, uniqueness: true
-
-  after_commit :create_then_associate_setup, on: :create
-
-  def create_then_associate_setup
-    Setup.create(organization: self)
-  end
 end
