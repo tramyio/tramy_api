@@ -4,6 +4,8 @@ module Hookdeck
   class MessagesController < ApplicationController
     # TODO: Check if incoming payload include messages' keys, then execute incoming webhooks logic
     # TODO: Check if incoming payload include statuses' keys, then execute status webhook logic
+    skip_before_action :authenticate_user!
+
     def webhook
       return if params.key?(:statuses) # Skip temporarily statuses
 
@@ -23,7 +25,7 @@ module Hookdeck
     end
 
     def message_hook
-      params.dig(:messages, 0).to_unsafe_h
+      params.dig(:messages, 0).to_unsafe_h.reject! { |key| key == 'id' }
     end
   end
 end
