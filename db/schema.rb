@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_26_040324) do
+ActiveRecord::Schema.define(version: 2021_09_12_025439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 2021_08_26_040324) do
     t.bigint "account_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "whatsapp_window"
     t.index ["account_id"], name: "index_chats_on_account_id"
     t.index ["lead_id"], name: "index_chats_on_lead_id"
   end
