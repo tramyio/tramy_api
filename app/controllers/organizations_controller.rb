@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 class OrganizationsController < ApplicationController
   before_action :set_organization, only: %i[show update]
 
   # GET /organizations/1
   def show
-    # TODO: Check if I'm organization's owner 
     render json: @organization
   end
 
@@ -20,7 +21,7 @@ class OrganizationsController < ApplicationController
 
   # PATCH/PUT /organizations/1
   def update
-    if @organization.update(organization_params)
+    if @organization.update(update_organization_params)
       render json: @organization
     else
       render json: @organization.errors, status: :unprocessable_entity
@@ -28,13 +29,18 @@ class OrganizationsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_organization
-      @organization = Organization.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def organization_params
-      params.fetch(:organization, {})
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_organization
+    @organization = current_user.organization
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def organization_params
+    params.require(:organization).permit(:name, :phone, :address, :domain, :provider_api_key)
+  end
+
+  def update_organization_params
+    params.require(:organization).permit(:name, :address, :domain)
+  end
 end
