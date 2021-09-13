@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class LeadsController < ApplicationController
+  # TODO: Fix vulnerability issue in case user try to update lead to another organization
   before_action :set_lead, only: %i[show update destroy]
 
   # GET /leads
@@ -47,8 +48,9 @@ class LeadsController < ApplicationController
     @lead = Lead.find(params[:id])
   end
 
-  # Only allow a trusted parameter "white list" through. 
+  # Only allow a trusted parameter "white list" through.
   def lead_params
-    params.require(:lead).permit(:stage_id, :name, :email, :phone)
+    params.require(:lead).permit(:stage_id, :name, :email, :phone,
+                                 :organization_id).with_defaults(organization_id: current_user.organization.id)
   end
 end
