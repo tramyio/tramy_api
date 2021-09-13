@@ -30,7 +30,7 @@ class ChatsController < ApplicationController
   # GET /chats/1
   def show
     # TODO: Add Pundit
-    render json: ChatSerializer.new(@chat).serializable_hash[:data]
+    render json: ChatShowSerializer.new(@chat).serializable_hash[:data]
   end
 
   # PATCH/PUT /chats/1
