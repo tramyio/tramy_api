@@ -7,5 +7,8 @@ class Organization < ApplicationRecord
   has_many :accounts
   has_many :pipelines
 
-  validates :phone, uniqueness: true
+  # Fast access
+  has_many :leads
+
+  validates :phone, uniqueness: true, presence: true
 end

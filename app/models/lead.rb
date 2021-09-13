@@ -5,6 +5,7 @@ class Lead < ApplicationRecord
   has_one :chat, dependent: :destroy # If the lead is destroyed, consequently the chat also.
 
   belongs_to :stage, optional: true # For recently created lead (non-assigned)
+  belongs_to :organization
 
   scope :oldest_created, -> { order(created_at: :asc) }
 
