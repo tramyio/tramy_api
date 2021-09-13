@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 class StagesController < ApplicationController
-  before_action :set_stage, only: [:show, :update, :destroy]
+  before_action :set_stage, only: %i[show update destroy]
 
   # GET /stages
   def index
-    @stages = Stage.all
-
+    @stages = Stage.joins(:pipeline).merge(Pipeline.where(organization_id: current_user.organization))
     render json: @stages
   end
 
@@ -39,13 +40,14 @@ class StagesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_stage
-      @stage = Stage.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def stage_params
-      params.require(:stage).permit(:index, :create, :update, :destroy)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_stage
+    @stage = Stage.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def stage_params
+    params.fetch(:stage, {})
+  end
 end
