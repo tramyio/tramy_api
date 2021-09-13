@@ -11,7 +11,11 @@ class ChatSerializer
     object.chat_data['messages'].last
   end
 
-  attributes :attended_by do |object|
+  attribute :attended_by do |object|
     object&.account&.user&.profile
+  end
+
+  attribute :current_stage do |object|
+    object&.lead&.stage
   end
 end
