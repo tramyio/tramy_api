@@ -9,7 +9,6 @@ class ChatsController < ApplicationController
   # TODO: Create a method that decides if it will send a new_message or will open_conversation
 
   before_action :set_chat, only: %i[show update new_message list_notes destroy]
-  before_action :set_organization, only: %i[index new_message]
 
   # GET /chats
   def index
@@ -46,7 +45,7 @@ class ChatsController < ApplicationController
     response = HTTParty.post(
       'https://waba-sandbox.360dialog.io/v1/messages',
       headers: { 'Content-Type': 'application/json',
-                 'D360-API-KEY': @organization.provider_api_key },
+                 'D360-API-KEY': current_user.organization.provider_api_key },
       body: {
         recipient_type: 'individual',
         to: @chat.lead.phone,
@@ -91,9 +90,5 @@ class ChatsController < ApplicationController
   # Neccesary params for agent reassignment
   def chat_params
     params.require(:chat).permit(:account_id, :chat_data)
-  end
-
-  def set_organization
-    @organization = current_user.account.organization
   end
 end
