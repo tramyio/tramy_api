@@ -11,21 +11,21 @@ Rails.application.routes.draw do
     registrations: 'users/registrations'
   }
 
-  resources :chats, only: %i[index show create update]
-  resources :leads, only: %i[index show create update]
-  resources :stages, only: %i[index show create update]
-  resources :pipelines, only: %i[index show create update]
-  resources :organizations, only: %i[show create update]
-
   namespace :hookdeck do
     post 'messages/webhook'
   end
 
-  patch 'chats/:id/new_message', to: 'chats#new_message'
-  get '/chats_assigned_to_me', to: 'chats#assigned_to_me'
-  get '/chats_not_assigned', to: 'chats#not_assigned'
-  get 'chats/:id/notes', to: 'chats#list_notes'
+  resources :chats, only: %i[index show update] # Chat (All) / Chat (Detailed chat) / Chat (Reassign agent) 
+  resources :leads, only: %i[index show create update]
+  resources :stages, only: %i[index show create update]
+  resources :pipelines, only: %i[index create update]
+  resources :organizations, only: %i[show create update]
 
-  get 'accounts', to: 'accounts#index'
+  patch 'chats/:id/new_message', to: 'chats#new_message'  # Chat (New message) 
+  get '/chats_assigned_to_me', to: 'chats#assigned_to_me' # Chat (Assigned to me) 
+  get '/chats_not_assigned', to: 'chats#not_assigned' # Chat (Unassigned) 
+  get 'chats/:id/notes', to: 'chats#list_notes' # Chat (Get notes) 
 
+  get 'accounts', to: 'accounts#index' # Team / Chat (List of agents) 
+  get 'my_account', to: 'accounts#show' #Profile
 end

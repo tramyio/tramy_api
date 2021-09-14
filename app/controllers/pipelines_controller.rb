@@ -7,14 +7,14 @@ class PipelinesController < ApplicationController
   def index
     @pipelines = Pipeline.includes(:stages).where(organization: current_user.organization)
 
-    render json: PipelineSerializer.new(@pipelines)
+    render json: PipelineSerializer.new(@pipelines).serializable_hash[:data]
   end
 
   # GET /pipelines/1
-  def show
-    # TODO: Add Pundit
-    render json: @pipeline
-  end
+  # def show
+  #   # TODO: Add Pundit
+  #   render json: @pipeline
+  # end
 
   # POST /pipelines
   def create
@@ -39,9 +39,9 @@ class PipelinesController < ApplicationController
 
   # DELETE /pipelines/1
   # TODO: Add Pundit
-  def destroy
-    @pipeline.destroy
-  end
+  # def destroy
+  #   @pipeline.destroy
+  # end
 
   private
 
@@ -52,6 +52,7 @@ class PipelinesController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def pipeline_params
-    params.require(:pipeline).permit(:index, :create, :update, :destroy)
+    params.require(:pipeline).permit(:name,
+                                     :organization_id).with_defaults(organization_id: current_user.organization.id)
   end
 end
