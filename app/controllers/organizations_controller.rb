@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class OrganizationsController < ApplicationController
+  # TODO: Convert to role admin when user creates organization (https://github.com/tramyio/tramy_api/issues/15)
+
   before_action :set_organization, only: %i[show update]
 
   def show
