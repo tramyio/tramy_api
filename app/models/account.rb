@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Account < ApplicationRecord
-  # TODO: Define roles for Account model (https://github.com/tramyio/tramy_api/issues/3)
   enum role: {
     admin: 0,
     owner: 1,
