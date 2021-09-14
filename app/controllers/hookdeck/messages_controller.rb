@@ -5,7 +5,6 @@ module Hookdeck
     # TODO: Check if incoming payload include messages' keys, then execute incoming webhooks logic
     # TODO: Check if incoming payload include statuses' keys, then execute status webhook logic
     skip_before_action :authenticate_user!
-    # before_action :set_organization, only: %i[webhook]
 
     def webhook
       return if params.key?(:statuses) # Skip temporarily webhook statuses

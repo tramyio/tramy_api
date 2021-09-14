@@ -2,7 +2,7 @@
 
 class LeadsController < ApplicationController
   # TODO: Fix vulnerability issue in case user try to update lead to another organization
-  before_action :set_lead, only: %i[show update destroy]
+  before_action :set_lead, only: %i[show update]
 
   # GET /leads
   def index
@@ -35,11 +35,6 @@ class LeadsController < ApplicationController
       render json: @lead.errors, status: :unprocessable_entity
     end
   end
-
-  # DELETE /leads/1
-  # def destroy
-  #   @lead.destroy
-  # end
 
   private
 
