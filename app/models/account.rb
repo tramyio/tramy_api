@@ -1,7 +1,12 @@
 # frozen_string_literal: true
 
 class Account < ApplicationRecord
-  # TODO: Define roles for Account model (https://github.com/tramyio/tramy_api/issues/3)
+  enum role: {
+    admin: 0,
+    owner: 1,
+    agent: 2
+  }
+
   # TODO: Define condition for account.active = false (Payment? Banished?)
   has_many :chats
 

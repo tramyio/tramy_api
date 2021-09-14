@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class LeadsController < ApplicationController
-  before_action :set_lead, only: %i[show update destroy]
+  # TODO: Fix vulnerability issue in case user try to update lead to another organization
+  before_action :set_lead, only: %i[show update]
 
   # GET /leads
   def index
@@ -35,11 +36,6 @@ class LeadsController < ApplicationController
     end
   end
 
-  # DELETE /leads/1
-  # def destroy
-  #   @lead.destroy
-  # end
-
   private
 
   # Use callbacks to share common setup or constraints between actions.
@@ -47,8 +43,9 @@ class LeadsController < ApplicationController
     @lead = Lead.find(params[:id])
   end
 
-  # Only allow a trusted parameter "white list" through. 
+  # Only allow a trusted parameter "white list" through.
   def lead_params
-    params.require(:lead).permit(:stage_id, :name, :email, :phone)
+    params.require(:lead).permit(:stage_id, :name, :email, :phone,
+                                 :organization_id).with_defaults(organization_id: current_user.organization.id)
   end
 end

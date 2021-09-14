@@ -17,6 +17,8 @@ class User < ApplicationRecord
   after_commit :create_then_associate_profile, on: :create
   after_commit :create_then_associate_account, on: :create
 
+  delegate :organization, to: :account
+
   def create_then_associate_profile
     Profile.create(user: self)
   end
