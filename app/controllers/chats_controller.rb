@@ -3,7 +3,6 @@
 class ChatsController < ApplicationController
   # TODO: Destroy chat should not delete chat per se, should only delete list of messages
   # TODO: Assigning chat to an agent
-  # TODO: Add D360-API-KEY for every Tramy's customer
   # TODO: Serialize chat index to show only newest message
   # TODO: Check that update method only re-assign chat to one of my organization mates
   # TODO: Create a method that decides if it will send a new_message or will open_conversation
@@ -59,11 +58,17 @@ class ChatsController < ApplicationController
     case response.code
     when 201
       lead = Lead.find_by(phone: @chat.lead.phone)
-      tramy_agent_message = { 'from': current_user.email || 'Desconocido', 'type': 'text' || params[:type],
-                              'text': { 'body': params[:message] } }
+
+      tramy_agent_message = { id: JSON.parse(response.body)['messages'][0]['id'],
+                              from: current_user.email || 'Desconocido',
+                              text: { body: params[:message] },
+                              type: 'text' || params[:type],
+                              timestamp: Time.now.to_i.to_s }
+
       lead.chat.chat_data['messages'] << tramy_agent_message
       lead.chat.save
-      render json: lead.chat.chat_data, status: :created
+
+      render json: tramy_agent_message, status: :created
     when 403
       render json: 'No tiene permiso para comunicarse con este numero', status: :forbidden
     else
