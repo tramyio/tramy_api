@@ -55,5 +55,5 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   # Disable host restriction in development
-  # config.hosts.clear
+  config.hosts.clear
 end

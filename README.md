@@ -39,13 +39,14 @@ Things you may want to cover:
 ### Install
 
 - Clone this repository
-- Install have Ruby 2.7.2 and Rails 6.0.4
+- Install Ruby 2.7.2 and Rails 6.0.4
 - Then run the following command `bundle install`
 
 ### Port
 
-- Expose one of your ports, usually port 3000 for API (We suggest you to use Ngrok or Localtunnel)
-- Paste your your_exposed_port_url in `development.rb` at the end of the file and paste config.hosts << "your_exposed_port_url"
+- Expose one of your ports (usually port 3000) for API (We suggest you to use Ngrok or Localtunnel)
+- Option 1: Paste your your_exposed_port_url in `development.rb` at the end of the file and paste config.hosts << "your_exposed_port_url"
+- Option 2 (Recent): Tramy is configured to accept request from all sources just in development mode. Check more about _config.hosts.clear_
 
 ### Providers
 
