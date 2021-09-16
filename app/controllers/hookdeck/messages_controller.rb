@@ -10,11 +10,10 @@ module Hookdeck
         owner_organization = Organization.find_by(phone: organization_phone_hook)
 
         lead = Lead.where(phone: lead_phone_hook)
-                   .first_or_create(organization: owner_organization,
-                                    phone: lead_phone_hook,
-                                    name: lead_name_hook)
+                   .first_or_create(organization: owner_organization, name: lead_name_hook)
 
-        lead.chat.chat_data['messages'] << lead_message_hook.merge!(status: 'delivered', timestamp: lead_message_timestamp)
+        lead.chat.chat_data['messages'] << lead_message_hook.merge!(status: 'delivered',
+                                                                    timestamp: lead_message_timestamp)
         lead.chat.save
         head :ok
       elsif params.key?(:statuses)
@@ -54,7 +53,7 @@ module Hookdeck
     end
 
     def lead_message_timestamp
-      params.dig(:messages,0,:timestamp)
+      params.dig(:messages, 0, :timestamp)
     end
 
     def organization_phone_hook
