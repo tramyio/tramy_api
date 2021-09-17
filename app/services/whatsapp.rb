@@ -1,19 +1,18 @@
 # frozen_string_literal: true
 
-class Whatsapp
+class Whatsapp < ApplicationService
   # To: @chat.lead.phone
-  def self.call(user, to, type, message)
-    new(user, to, type, message).call
-  end
 
   attr_reader :user, :to, :type, :message
 
+  # rubocop:disable Lint/MissingSuper
   def initialize(user, to, type, message)
     @user = user
     @to = to
     @type = type
     @message = message
   end
+  # rubocop:enable Lint/MissingSuper
 
   def call
     case whatsapp_api_response.code
