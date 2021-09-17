@@ -6,7 +6,7 @@ class OrganizationsController < ApplicationController
   before_action :set_organization, only: %i[show update]
 
   def show
-    render json: @organization
+    render json: SafeOrganizationSerializer.new(@organization).serializable_hash[:data][:attributes]
   end
 
   def create
