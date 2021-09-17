@@ -53,7 +53,7 @@ class ChatsController < ApplicationController
     if note.save
       render json: note, status: :created
     else
-      render json: 'No se pudo agregar nota', status: :unprocessable_entity
+      render json: I18n.t('chat.note.failed'), status: :unprocessable_entity
     end
   end
 
