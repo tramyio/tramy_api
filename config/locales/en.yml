@@ -33,8 +33,8 @@ en:
   hello: "Hello world"
   http_response:
     403:
-      message: "No tiene permiso para comunicarse con este numero"
+      message: "You do not have permission to contact this number"
     400:
-      message: "El servidor no pudo procesar la peticion"
+      message: "The server could not process the request"
     other:
-      message: "No se pudo enviar el mensaje al destinatario"
+      message: "The message could not be delivered to the recipient"

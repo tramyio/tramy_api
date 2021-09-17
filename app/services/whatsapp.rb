@@ -22,7 +22,7 @@ class Whatsapp
     when 403
       { json: I18n.t("http_response.#{whatsapp_api_response.code}.message"), status: whatsapp_api_response.code }
     else
-      { json: I18n.t("http_response.#{whatsapp_api_response.code}.message"), status: whatsapp_api_response.code }
+      { json: I18n.t('http_response.other.message'), status: whatsapp_api_response.code }
     end
   end
 
