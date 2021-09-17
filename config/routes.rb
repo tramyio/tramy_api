@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   get '/chats_assigned_to_me', to: 'chats#assigned_to_me' #  Chat (Assigned to me)
   get '/chats_not_assigned', to: 'chats#not_assigned' # Chat (Unassigned)
   get 'chats/:id/notes', to: 'chats#list_notes' # Chat (Get notes)
+  post 'chats/:id/notes', to: 'chats#append_note' # Chat (Get notes)
 
   get 'accounts', to: 'accounts#index' # Team / Chat (List of agents)
   get 'my_account', to: 'accounts#show' # Profile

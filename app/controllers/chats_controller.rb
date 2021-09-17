@@ -7,9 +7,8 @@ class ChatsController < ApplicationController
   # TODO: Check that update method only re-assign chat to one of my organization mates
   # TODO: Create a method that decides if it will send a new_message or will open_conversation
 
-  before_action :set_chat, only: %i[show update new_message list_notes destroy]
+  before_action :set_chat, only: %i[show update new_message list_notes append_note destroy]
 
-  # GET /chats
   def index
     @chats = Chat.joins(:lead).merge(Lead.where(organization_id: current_user.organization)).recently_updated
     render json: ChatSerializer.new(@chats).serializable_hash[:data], status: :ok
@@ -25,13 +24,11 @@ class ChatsController < ApplicationController
     render json: ChatSerializer.new(@chats).serializable_hash[:data], status: :ok
   end
 
-  # GET /chats/1
   def show
     # TODO: Add Pundit
     render json: ChatShowSerializer.new(@chat).serializable_hash[:data]
   end
 
-  # PATCH/PUT /chats/1
   def update
     if @chat.update(chat_params)
       render json: @chat
@@ -41,48 +38,27 @@ class ChatsController < ApplicationController
   end
 
   def new_message
-    response = HTTParty.post(
-      'https://waba-sandbox.360dialog.io/v1/messages',
-      headers: { 'Content-Type': 'application/json',
-                 'D360-API-KEY': current_user.organization.provider_api_key },
-      body: {
-        recipient_type: 'individual',
-        to: @chat.lead.phone,
-        type: 'text' || params[:type],
-        text: {
-          body: params[:message]
-        }
-      }.to_json
-    )
+    response = Whatsapp.call(current_user, @chat.lead.phone, params[:type], params[:message])
 
-    case response.code
-    when 201
-      lead = Lead.find_by(phone: @chat.lead.phone)
+    render response
+  end
 
-      tramy_agent_message = { id: JSON.parse(response.body)['messages'][0]['id'],
-                              from: current_user.email || 'Desconocido',
-                              text: { body: params[:message] },
-                              type: 'text' || params[:type],
-                              timestamp: Time.now.to_i.to_s }
+  def list_notes
+    # TODO: Add Pundit
+    render json: NoteSerializer.new(@chat.notes).serializable_hash[:data]
+  end
 
-      lead.chat.chat_data['messages'] << tramy_agent_message
-      lead.chat.save
-
-      render json: tramy_agent_message, status: :created
-    when 403
-      render json: 'No tiene permiso para comunicarse con este numero', status: :forbidden
+  def append_note
+    note = Note.new(content: params[:content], chat: @chat)
+    if note.save
+      render json: note, status: :created
     else
-      render json: 'No se pudo enviar el mensaje al destinatario', status: :unprocessable_entity
+      render json: I18n.t('chat.note.failed'), status: :unprocessable_entity
     end
   end
 
   def open_conversation
     # TODO: Method open conversation when 24-hour window has been closed.
-  end
-
-  def list_notes
-    # TODO: Add Pundit
-    render json: @chat.notes
   end
 
   private

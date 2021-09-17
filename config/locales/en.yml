@@ -31,3 +31,13 @@
 
 en:
   hello: "Hello world"
+  http_response:
+    403:
+      message: "You do not have permission to contact this number"
+    400:
+      message: "The server could not process the request"
+    other:
+      message: "The message could not be delivered to the recipient"
+  chat:
+    note:
+      failed: "The note could not be added to the current chat"

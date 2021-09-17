@@ -25,4 +25,14 @@ class Lead < ApplicationRecord
   def assigned_account?
     !assigned_account.nil?
   end
+
+  def update_messages!(message)
+    chat.chat_data['messages'] << message
+    chat.save
+    message
+  end
+
+  def update_status_message(message_id, status)
+    chat.chat_data['messages'].find { |msg| msg['id'] == message_id }['status'] = status
+  end
 end
