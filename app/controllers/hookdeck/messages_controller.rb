@@ -6,7 +6,6 @@ module Hookdeck
 
     def webhook
       if params.key?(:messages)
-        # return if params.key?(:statuses) # Skip temporarily webhook statuses
         owner_organization = Organization.find_by(phone: organization_phone_hook)
 
         lead = Lead.where(phone: lead_phone_hook)
@@ -14,28 +13,12 @@ module Hookdeck
 
         lead.chat.chat_data['messages'] << lead_message_hook.merge!(status: 'delivered',
                                                                     timestamp: lead_message_timestamp)
-        lead.chat.save
-        head :ok
       elsif params.key?(:statuses)
-        lead = Lead.find_by(phone: lead_status_phone)
-        lead.chat.chat_data['messages']
-            .select { |msg| msg['id'] == lead_status_message_id }[0]['status'] = lead_status_name
-        lead.chat.save
-        head :ok
+        lead = Lead.find_by(phone: whatsapp_params[:recipient_id])
+        lead.update_status_message(whatsapp_params[:id], whatsapp_params[:status])
       end
-    end
-
-    # Status methods
-    def lead_status_phone
-      params.dig(:statuses, 0, :recipient_id)
-    end
-
-    def lead_status_message_id
-      params.dig(:statuses, 0, :id)
-    end
-
-    def lead_status_name
-      params.dig(:statuses, 0, :status)
+      lead.chat.save
+      head :ok
     end
 
     # Message methods
@@ -58,6 +41,12 @@ module Hookdeck
 
     def organization_phone_hook
       params[:number]
+    end
+
+    private
+
+    def whatsapp_params
+      params.require(:message).permit(statuses: %i[recipient_id id status]).to_h[:statuses][0]
     end
   end
 end
