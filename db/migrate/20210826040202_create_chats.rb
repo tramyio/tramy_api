@@ -4,6 +4,7 @@ class CreateChats < ActiveRecord::Migration[6.0]
       t.jsonb :chat_data
       t.references :lead, null: false, foreign_key: true
       t.references :account, null: true, foreign_key: true
+      t.boolean :whatsapp_window
 
       t.timestamps
     end
