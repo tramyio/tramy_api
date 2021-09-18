@@ -2,9 +2,6 @@
 
 class ChatsController < ApplicationController
   # TODO: Destroy chat should not delete chat per se, should only delete list of messages
-  # TODO: Assigning chat to an agent
-  # TODO: Serialize chat index to show only newest message
-  # TODO: Check that update method only re-assign chat to one of my organization mates
   # TODO: Create a method that decides if it will send a new_message or will open_conversation
 
   before_action :set_chat, only: %i[show update new_message list_notes append_note destroy]
@@ -30,6 +27,9 @@ class ChatsController < ApplicationController
   end
 
   def update
+    assigned_agent = Account.find(params[:account_id])
+    return unless assigned_agent.organization == current_user.organization
+
     if @chat.update(chat_params)
       render json: @chat
     else
@@ -59,6 +59,10 @@ class ChatsController < ApplicationController
 
   def open_conversation
     # TODO: Method open conversation when 24-hour window has been closed.
+  end
+
+  def permitted_chat(chat)
+    (current_user.organization == chat.lead.organization)
   end
 
   private
