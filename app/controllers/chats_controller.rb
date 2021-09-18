@@ -22,7 +22,8 @@ class ChatsController < ApplicationController
   end
 
   def show
-    # TODO: Add Pundit
+    return unless permitted_chat(@chat)
+  
     render json: ChatShowSerializer.new(@chat).serializable_hash[:data]
   end
 
