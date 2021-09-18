@@ -14,7 +14,7 @@ module Hookdeck
         lead.chat.chat_data['messages'] << lead_message_hook.merge!(status: 'delivered',
                                                                     timestamp: lead_message_timestamp)
       elsif params.key?(:statuses)
-        lead = Lead.find_by(phone: whatsapp_params[:recipient_id])
+        lead = Lead.find_by(phone: whatsapp_params[:recipient_id]) # TODO: Find_by phone and organization
         lead.update_status_message(whatsapp_params[:id], whatsapp_params[:status])
       end
       lead.chat.save
