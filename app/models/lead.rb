@@ -10,7 +10,7 @@ class Lead < ApplicationRecord
   scope :recently_created, -> { order(created_at: :desc) }
 
   validates :email, allow_nil: true, format: { with: URI::MailTo::EMAIL_REGEXP }
-  validates :phone, presence: true, uniqueness: true
+  validates :phone, presence: true, uniqueness: { scope: :organization_id }
 
   after_commit :create_then_associate_chat, on: :create
 
