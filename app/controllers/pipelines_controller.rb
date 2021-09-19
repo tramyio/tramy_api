@@ -3,7 +3,6 @@
 class PipelinesController < ApplicationController
   before_action :set_pipeline, only: %i[show update destroy]
 
-  # GET /pipelines
   def index
     @pipelines = Pipeline.includes(:stages).where(organization: current_user.organization)
 
@@ -16,18 +15,16 @@ class PipelinesController < ApplicationController
   #   render json: @pipeline
   # end
 
-  # POST /pipelines
   def create
     @pipeline = Pipeline.new(pipeline_params)
 
     if @pipeline.save
-      render json: @pipeline, status: :created, location: @pipeline
+      render json: @pipeline, status: :created
     else
       render json: @pipeline.errors, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /pipelines/1
   def update
     # TODO: Add Pundit
     if @pipeline.update(pipeline_params)
@@ -37,7 +34,6 @@ class PipelinesController < ApplicationController
     end
   end
 
-  # DELETE /pipelines/1
   # TODO: Add Pundit
   # def destroy
   #   @pipeline.destroy

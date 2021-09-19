@@ -12,7 +12,7 @@ class StagesController < ApplicationController
     @stage = Stage.new(stage_params)
 
     if @stage.save
-      render json: @stage, status: :created, location: @stage
+      render json: @stage, status: :created
     else
       render json: @stage.errors, status: :unprocessable_entity
     end
