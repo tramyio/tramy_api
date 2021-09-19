@@ -1,6 +1,6 @@
 class ProfilesController < ApplicationController
   def show
-    render json: profile
+    render json: ProfileSerializer.new(profile).serializable_hash[:data][:attributes]
   end
 
   def update
