@@ -5,7 +5,7 @@ class Profile < ApplicationRecord
 
   validates :first_name, length: { maximum: 100 }
   validates :last_name, length: { maximum: 100 }
-  validates :logo_url, allow_blank: true, format: URI::DEFAULT_PARSER.make_regexp(%w[http https])
+  validates :photo_url, allow_nil: true, format: URI::DEFAULT_PARSER.make_regexp(%w[http https])
 
   delegate :account, to: :user, prefix: true
 end
