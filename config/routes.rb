@@ -23,6 +23,8 @@ Rails.application.routes.draw do
   resources :stages, only: %i[index update]
   resources :pipelines, only: %i[index create update]
   resources :organizations, only: %i[create]
+
+  # Organization
   get 'my_organization', to: 'organizations#show'
   patch 'my_organization', to: 'organizations#update'
 

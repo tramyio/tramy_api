@@ -6,7 +6,7 @@ class OrganizationsController < ApplicationController
   before_action :set_organization, only: %i[show update]
 
   def show
-    render json: SafeOrganizationSerializer.new(@organization).serializable_hash[:data][:attributes]
+    render json: SafeOrganizationSerializer.new(@organization).serializable_hash[:data][:attributes], status: :ok
   end
 
   def create
@@ -20,7 +20,7 @@ class OrganizationsController < ApplicationController
 
   def update
     if @organization.update(update_organization_params)
-      render json: @organization
+      render json: SafeOrganizationSerializer.new(@organization).serializable_hash[:data][:attributes]
     else
       render json: @organization.errors, status: :unprocessable_entity
     end
@@ -33,10 +33,11 @@ class OrganizationsController < ApplicationController
   end
 
   def organization_params
-    params.require(:organization).permit(:name, :phone, :address, :domain, :provider_api_key)
+    params.require(:organization).permit(:name, :address, :domain, :provider_api_key, :phone)
   end
 
   def update_organization_params
+    # Do not allow allow user updates api_key or phone !
     params.require(:organization).permit(:name, :address, :domain)
   end
 end
