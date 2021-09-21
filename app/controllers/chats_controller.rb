@@ -65,7 +65,7 @@ class ChatsController < ApplicationController
   end
 
   def permitted_chat(chat)
-    (current_user.organization == chat.lead.organization)
+    current_user.organization == chat.lead.organization
   end
 
   private
