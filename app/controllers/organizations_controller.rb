@@ -6,7 +6,7 @@ class OrganizationsController < ApplicationController
   before_action :set_organization, only: %i[show update]
 
   def show
-    render json: SafeOrganizationSerializer.new(@organization).serializable_hash[:data][:attributes], status: :ok
+    safe_render(@organization)
   end
 
   def create
@@ -20,10 +20,14 @@ class OrganizationsController < ApplicationController
 
   def update
     if @organization.update(update_organization_params)
-      render json: SafeOrganizationSerializer.new(@organization).serializable_hash[:data][:attributes]
+      safe_render(@organization)
     else
       render json: @organization.errors, status: :unprocessable_entity
     end
+  end
+
+  def safe_render(organization)
+    render json: SafeOrganizationSerializer.new(organization).serializable_hash[:data][:attributes]
   end
 
   private
