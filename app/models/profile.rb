@@ -3,5 +3,9 @@
 class Profile < ApplicationRecord
   belongs_to :user
 
-  # TODO: Validate photo_url from external provider: Amazon, Firebase or GCP
+  validates :first_name, length: { maximum: 100 }
+  validates :last_name, length: { maximum: 100 }
+  validates :photo_url, allow_nil: true, format: URI::DEFAULT_PARSER.make_regexp(%w[http https])
+
+  delegate :account, to: :user, prefix: true
 end

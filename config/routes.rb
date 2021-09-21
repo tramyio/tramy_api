@@ -23,15 +23,22 @@ Rails.application.routes.draw do
   resources :stages, only: %i[index update]
   resources :pipelines, only: %i[index create update]
   resources :organizations, only: %i[create]
+
+  # Organization
   get 'my_organization', to: 'organizations#show'
   patch 'my_organization', to: 'organizations#update'
 
+  # Profile
+  get 'my_profile', to: 'profiles#show' # Get my profile
+  patch 'my_profile', to: 'profiles#update' # Update my profile
+
+  # Chat
   patch 'chats/:id/new_message', to: 'chats#new_message'  #  Chat (New message)
   get '/chats_assigned_to_me', to: 'chats#assigned_to_me' #  Chat (Assigned to me)
   get '/chats_not_assigned', to: 'chats#not_assigned' # Chat (Unassigned)
   get 'chats/:id/notes', to: 'chats#list_notes' # Chat (Get notes)
   post 'chats/:id/notes', to: 'chats#append_note' # Chat (Get notes)
 
+  # Account
   get 'accounts', to: 'accounts#index' # Team / Chat (List of agents)
-  get 'my_account', to: 'accounts#show' # Profile
 end
