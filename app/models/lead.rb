@@ -7,10 +7,10 @@ class Lead < ApplicationRecord
   belongs_to :stage, optional: true # For recently created lead (non-assigned)
   belongs_to :organization
 
-  scope :oldest_created, -> { order(created_at: :asc) }
+  scope :recently_created, -> { order(created_at: :desc) }
 
   validates :email, allow_nil: true, format: { with: URI::MailTo::EMAIL_REGEXP }
-  validates :phone, presence: true, uniqueness: true
+  validates :phone, presence: true, uniqueness: { scope: :organization_id }
 
   after_commit :create_then_associate_chat, on: :create
 

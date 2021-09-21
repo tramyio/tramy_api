@@ -20,9 +20,11 @@ Rails.application.routes.draw do
 
   resources :chats, only: %i[index show update] # Chat (All) / Chat (Detailed chat) / Chat (Reassign agent)
   resources :leads, only: %i[index show create update]
-  resources :stages, only: %i[index]
+  resources :stages, only: %i[index update]
   resources :pipelines, only: %i[index create update]
-  resources :organizations, only: %i[show create update]
+  resources :organizations, only: %i[create]
+  get 'my_organization', to: 'organizations#show'
+  patch 'my_organization', to: 'organizations#update'
 
   patch 'chats/:id/new_message', to: 'chats#new_message'  #  Chat (New message)
   get '/chats_assigned_to_me', to: 'chats#assigned_to_me' #  Chat (Assigned to me)

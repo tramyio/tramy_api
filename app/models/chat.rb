@@ -9,10 +9,10 @@ class Chat < ApplicationRecord
   scope :recently_updated, -> { order(updated_at: :desc) }
   scope :unattended, -> { where(account_id: nil) }
 
-  after_commit :add_creation_note, on: :create
+  after_commit :add_note, on: :create
   # TODO: after_commit :validate_window
 
-  def add_creation_note
+  def add_note
     Note.create(chat: self, content: "Se inició la conversación. #{DateTime.now.tramy_format}")
   end
 

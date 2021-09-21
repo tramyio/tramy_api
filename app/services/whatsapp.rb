@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 class Whatsapp < ApplicationService
-  # To: @chat.lead.phone
 
-  attr_reader :user, :to, :type, :message
+  attr_reader :user, :to, :type, :message # to: @chat.lead.phone
 
   # rubocop:disable Lint/MissingSuper
   def initialize(user, to, type, message)
@@ -26,7 +25,7 @@ class Whatsapp < ApplicationService
   end
 
   def updated_lead_messages
-    lead = Lead.find_by(phone: to)
+    lead = Lead.find_by(phone: to, organization: user.organization)
 
     lead.update_messages!(formatted_lead_message)
   end
@@ -41,7 +40,7 @@ class Whatsapp < ApplicationService
 
   def whatsapp_api_response
     @whatsapp_api_response ||= HTTParty.post(
-      'https://waba-sandbox.360dialog.io/v1/messages',
+      "#{ENV['360_BASE_URL']}/v1/messages",
       headers: headers,
       body: payload.to_json
     )

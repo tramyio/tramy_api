@@ -5,16 +5,17 @@ module Hookdeck
     skip_before_action :authenticate_user!
 
     def webhook
+      owner_organization = Organization.find_by(phone: organization_phone_hook)
       if params.key?(:messages)
-        owner_organization = Organization.find_by(phone: organization_phone_hook)
 
-        lead = Lead.where(phone: lead_phone_hook)
+        lead = Lead.where(phone: lead_phone_hook, organization: owner_organization)
                    .first_or_create(organization: owner_organization, name: lead_name_hook)
 
         lead.chat.chat_data['messages'] << lead_message_hook.merge!(status: 'delivered',
                                                                     timestamp: lead_message_timestamp)
       elsif params.key?(:statuses)
-        lead = Lead.find_by(phone: whatsapp_params[:recipient_id])
+
+        lead = Lead.find_by(phone: whatsapp_params[:recipient_id], organization: owner_organization)
         lead.update_status_message(whatsapp_params[:id], whatsapp_params[:status])
       end
       lead.chat.save

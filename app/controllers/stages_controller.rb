@@ -1,42 +1,39 @@
 # frozen_string_literal: true
 
 class StagesController < ApplicationController
-  before_action :set_stage, only: %i[show update destroy]
+  before_action :set_stage, only: %i[update destroy]
 
-  # GET /stages
   def index
     @stages = Stage.joins(:pipeline).merge(Pipeline.where(organization_id: current_user.organization))
     render json: @stages
   end
 
-  # GET /stages/1
-  def show
-    render json: @stage
-  end
-
-  # POST /stages
   def create
     @stage = Stage.new(stage_params)
 
     if @stage.save
-      render json: @stage, status: :created, location: @stage
+      render json: @stage, status: :created
     else
       render json: @stage.errors, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /stages/1
   def update
-    if @stage.update(stage_params)
+    return unless permitted_stage(@stage)
+
+    if @stage.update(update_stage_params)
       render json: @stage
     else
       render json: @stage.errors, status: :unprocessable_entity
     end
   end
 
-  # DELETE /stages/1
   def destroy
     @stage.destroy
+  end
+
+  def permitted_stage(stage)
+    (current_user.organization == stage.pipeline.organization)
   end
 
   private
@@ -48,6 +45,10 @@ class StagesController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def stage_params
-    params.fetch(:stage, {})
+    params.require(:stage).permit(:name, :pipeline_id)
+  end
+
+  def update_stage_params
+    params.require(:stage).permit(:name)
   end
 end
