@@ -1,8 +1,14 @@
+# frozen_string_literal: true
+
 class AccountSerializer
   include JSONAPI::Serializer
-  attributes :id, :user_id, :organization_id, :role, :active
+  attributes :full_name, :email, :role, :active
 
-  attribute :profile do |object|
-    object&.user&.profile
+  attribute :full_name do |object|
+    object&.user&.profile&.full_name
+  end
+
+  attribute :email do |object|
+    object&.user&.email
   end
 end
