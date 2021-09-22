@@ -6,7 +6,12 @@ class OrganizationsController < ApplicationController
   before_action :set_organization, only: %i[show update]
 
   def show
-    safe_render(@organization)
+    if @organization.nil?
+      render json: 'This account does not belong to a valid organization',
+             status: :not_found
+    else
+      safe_render(@organization)
+    end
   end
 
   def create

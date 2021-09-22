@@ -2,7 +2,7 @@
 
 class Account < ApplicationRecord
   enum role: {
-    admin: 0,
+    superadmin: 0, # Role enabled only for Tramy C's
     owner: 1,
     agent: 2
   }
