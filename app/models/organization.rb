@@ -10,4 +10,8 @@ class Organization < ApplicationRecord
   has_many :leads
 
   validates :phone, uniqueness: true, presence: true
+
+  def activate_accounts
+    accounts.update_all(active: true)
+  end
 end

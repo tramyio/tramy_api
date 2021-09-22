@@ -8,7 +8,7 @@ class LeadsController < ApplicationController
   def index
     @leads = @organization.leads.recently_created
 
-    render json: @leads
+    render json: LeadSerializer.new(@leads).serializable_hash[:data]
   end
 
   def show
@@ -38,7 +38,7 @@ class LeadsController < ApplicationController
   end
 
   def permitted_lead(lead)
-    (current_user.organization == lead.organization)
+    current_user.organization == lead.organization
   end
 
   private
