@@ -6,6 +6,6 @@ class PipelineSerializer
   attributes :name, :organization_id
 
   attributes :stages do |pipeline|
-    StageSerializer.new(pipeline.stages).serializable_hash[:data]
+    StageSerializer.new(pipeline.stages).serializable_hash[:data][:attributes]
   end
 end
