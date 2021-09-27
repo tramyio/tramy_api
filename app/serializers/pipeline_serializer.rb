@@ -4,7 +4,7 @@ class PipelineSerializer
   include JSONAPI::Serializer
 
   attributes :stages do |pipeline|
-    StageSerializer.new(pipeline.stages).serializable_hash[:data]
+    StageSerializer.new(pipeline.stages).serializable_hash[:data][:attributes]
   end
 
   attributes :name, :organization_id
