@@ -48,7 +48,8 @@ class PipelinesController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def pipeline_params
-    params.require(:pipeline).permit(:name,
-                                     :organization_id).with_defaults(organization_id: current_user.organization.id)
+    params.require(:pipeline)
+          .permit(:name, :organization_id)
+          .with_defaults(organization_id: current_user.organization.id)
   end
 end
