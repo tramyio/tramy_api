@@ -32,7 +32,7 @@ class ChatsController < ApplicationController
     return unless assigned_agent.organization == current_user.organization
 
     if @chat.update(chat_params)
-      render json: @chat
+      render json: ChatSerializer.new(@chat).serializable_hash[:data][:attributes]
     else
       render json: @chat.errors, status: :unprocessable_entity
     end
