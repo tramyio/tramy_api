@@ -2,7 +2,7 @@
 
 class AccountSerializer
   include JSONAPI::Serializer
-  attributes :full_name, :email, :role, :active
+  attributes :id, :full_name, :email, :role, :active
 
   attribute :full_name do |object|
     object&.user&.profile&.full_name
