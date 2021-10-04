@@ -7,7 +7,18 @@ class ChatsController < ApplicationController
   before_action :set_chat, only: %i[show update new_message list_notes append_note destroy]
 
   def index
-    @chats = Chat.joins(:lead).merge(Lead.where(organization_id: current_user.organization)).recently_updated
+    @chats = if params[:query].blank?
+               Chat.joins(:lead)
+                   .merge(Lead.where(organization_id: current_user.organization))
+                   .recently_updated
+             else
+               query = params[:query].to_s.downcase
+               Chat.joins(:lead)
+                   .merge(Lead.where(organization_id: current_user.organization)
+                              .where('lower(name) LIKE :query or phone LIKE :query', query: "%#{query}%"))
+                   .recently_updated
+             end
+
     render json: ChatSerializer.new(@chats).serializable_hash[:data], status: :ok
   end
 
@@ -23,7 +34,7 @@ class ChatsController < ApplicationController
 
   def show
     return unless permitted_chat(@chat)
-  
+
     render json: ChatShowSerializer.new(@chat).serializable_hash[:data]
   end
 
