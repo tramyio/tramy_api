@@ -5,6 +5,10 @@ class LeadSummarySerializer
   attributes :name, :email, :phone, :attended_by
 
   attribute :attended_by do |object|
-    ProfileSummarySerializer.new(object&.chat&.account&.user&.profile).serializable_hash[:data][:attributes]
+    if object&.chat&.account.blank?
+      object&.chat&.account
+    else
+      ProfileSummarySerializer.new(object&.chat&.account&.user&.profile).serializable_hash[:data][:attributes]
+    end
   end
 end

@@ -13,8 +13,8 @@ class PipelinesController < ApplicationController
   def list_pipeline_stage_leads
     @pipeline = @organization.pipelines.find(params[:pipeline_id])
     render json: PipelineStageLeadSerializer.new(@pipeline).serializable_hash[:data][:attributes]
-  rescue StandardError
-    render json: 'You do not have access to this pipeline or pipeline_id does not exist'
+  rescue StandardError => e
+    render json: "Pipeline not allowed or wrong id, error: #{e}"
   end
 
   def create
