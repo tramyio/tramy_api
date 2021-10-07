@@ -6,8 +6,11 @@ class PipelinesController < ApplicationController
 
   def index
     @pipelines = Pipeline.includes(:stages).where(organization: current_user.organization)
-
-    render json: PipelineSerializer.new(@pipelines).serializable_hash[:data]
+    if params[:query].blank?
+      render json: PipelineSerializer.new(@pipelines).serializable_hash[:data]
+    else
+      render json: PipelineSummarySerializer.new(@pipelines).serializable_hash[:data]
+    end
   end
 
   def list_pipeline_stage_leads
