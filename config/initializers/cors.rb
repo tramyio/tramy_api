@@ -9,7 +9,11 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'tramyio.vercel.app', 'www.tramyio.vercel.app'
+    if Rails.env.development?
+      origins 'localhost:3000', 'localhost:3001'
+    else
+      origins 'tramyio.vercel.app', 'www.tramyio.vercel.app'
+    end
     resource '*',
              headers: :any,
              expose: ['Authorization'],

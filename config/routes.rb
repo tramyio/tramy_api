@@ -24,6 +24,9 @@ Rails.application.routes.draw do
   resources :pipelines, only: %i[index create update]
   resources :organizations, only: %i[create]
 
+  # List for funnel module
+  get 'pipelines/:pipeline_id/leads_by_stage', to: 'pipelines#list_pipeline_stage_leads'
+
   # Organization
   get 'my_organization', to: 'organizations#show'
   patch 'my_organization', to: 'organizations#update'

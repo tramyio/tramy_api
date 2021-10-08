@@ -5,5 +5,7 @@ class PipelineSerializer
 
   attributes :name, :organization_id
 
-  attributes :stages, &:stages
+  attribute :stages do |object|
+    object.stages.select(:id, :name, :pipeline_id)
+  end
 end

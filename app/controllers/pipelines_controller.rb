@@ -2,18 +2,23 @@
 
 class PipelinesController < ApplicationController
   before_action :set_pipeline, only: %i[show update destroy]
+  before_action :set_organization, only: %i[list_pipeline_stage_leads]
 
   def index
     @pipelines = Pipeline.includes(:stages).where(organization: current_user.organization)
-
-    render json: PipelineSerializer.new(@pipelines).serializable_hash[:data]
+    if params[:query].blank?
+      render json: PipelineSerializer.new(@pipelines).serializable_hash[:data]
+    else
+      render json: PipelineSummarySerializer.new(@pipelines).serializable_hash[:data]
+    end
   end
 
-  # GET /pipelines/1
-  # def show
-  #   # TODO: Add Pundit
-  #   render json: @pipeline
-  # end
+  def list_pipeline_stage_leads
+    @pipeline = @organization.pipelines.find(params[:pipeline_id])
+    render json: PipelineStageLeadSerializer.new(@pipeline).serializable_hash[:data][:attributes]
+  rescue StandardError => e
+    render json: "Pipeline not allowed or wrong id, error: #{e}"
+  end
 
   def create
     @pipeline = Pipeline.new(pipeline_params)
@@ -44,6 +49,10 @@ class PipelinesController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_pipeline
     @pipeline = Pipeline.find(params[:id])
+  end
+
+  def set_organization
+    @organization = current_user.organization
   end
 
   # Only allow a trusted parameter "white list" through.
