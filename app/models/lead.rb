@@ -8,6 +8,7 @@ class Lead < ApplicationRecord
   belongs_to :organization
 
   scope :recently_created, -> { order(created_at: :desc) }
+  scope :recently_updated, -> { order(updated_at: :desc) }
 
   validates :email, allow_nil: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :phone, presence: true, uniqueness: { scope: :organization_id }
