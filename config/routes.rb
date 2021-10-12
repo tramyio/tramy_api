@@ -44,4 +44,7 @@ Rails.application.routes.draw do
 
   # Account
   get 'accounts', to: 'accounts#index' # Team / Chat (List of agents)
+
+  # Image endpoint
+  get 'image_test', to: 'chats#retrieve_image'
 end
