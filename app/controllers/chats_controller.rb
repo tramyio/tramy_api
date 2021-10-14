@@ -15,7 +15,8 @@ class ChatsController < ApplicationController
                query = params[:query].to_s.downcase
                Chat.joins(:lead)
                    .merge(Lead.where(organization_id: current_user.organization)
-                              .where('lower(name) LIKE :query or phone LIKE :query', query: "%#{query}%"))
+                              .where('lower(name) LIKE :query or lower(email) LIKE :query or phone LIKE :query',
+                                     query: "%#{query}%"))
                    .recently_updated
              end
 
