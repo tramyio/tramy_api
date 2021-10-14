@@ -6,7 +6,14 @@ class LeadsController < ApplicationController
   before_action :set_organization, only: %i[index]
 
   def index
-    @leads = @organization.leads.recently_created
+    if params[:query].blank?
+      @leads = @organization.leads.recently_created
+    else
+      query = params[:query].to_s.downcase
+      @leads = @organization.leads
+                            .where('lower(name) LIKE :query or lower(email) LIKE :query or phone LIKE :query',
+                                   query: "%#{query}%").recently_created
+    end
 
     render json: LeadSerializer.new(@leads).serializable_hash[:data]
   end
