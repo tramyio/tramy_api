@@ -5,6 +5,7 @@ class ChatsController < ApplicationController
   # TODO: Create a method that decides if it will send a new_message or will open_conversation
 
   before_action :set_chat, only: %i[show update new_message list_notes append_note destroy]
+
   def index
     @chats = if params[:query].blank?
                Chat.joins(:lead)
@@ -75,16 +76,16 @@ class ChatsController < ApplicationController
     # TODO: Method open conversation when 24-hour window has been closed.
   end
 
-  def retrieve_image
-    @image = HTTParty.get(
-      'https://waba.360dialog.io/v1/media/9fe3bb66-c0a7-4d13-8760-f60a52ce85af',
+  def retrieve_media
+    @media = HTTParty.get(
+      "https://waba.360dialog.io/v1/media/#{params[:media_id]}",
       headers: headers
     )
-    send_data @image.body, type: @image.content_type
+    send_data @media.body, type: @media.content_type
   end
 
   def headers
-    { 'D360-API-KEY': 'CjHi9BpPIQlGNBliljxlb6SFAK' }
+    { 'D360-API-KEY': current_user.organization.provider_api_key }
   end
 
   def permitted_chat(chat)
