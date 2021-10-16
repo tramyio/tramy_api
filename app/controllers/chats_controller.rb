@@ -76,6 +76,18 @@ class ChatsController < ApplicationController
     # TODO: Method open conversation when 24-hour window has been closed.
   end
 
+  def retrieve_media
+    @media = HTTParty.get(
+      "https://waba.360dialog.io/v1/media/#{params[:media_id]}",
+      headers: headers
+    )
+    send_data @media.body, type: @media.content_type
+  end
+
+  def headers
+    { 'D360-API-KEY': current_user.organization.provider_api_key }
+  end
+
   def permitted_chat(chat)
     current_user.organization == chat.lead.organization
   end
