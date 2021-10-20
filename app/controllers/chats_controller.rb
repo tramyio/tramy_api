@@ -84,6 +84,11 @@ class ChatsController < ApplicationController
     send_data @media.body, type: @media.content_type
   end
 
+  def list_templates
+    @templates = HTTParty.get('https://waba.360dialog.io/v1/configs/templates', headers: headers)
+    render json: @templates
+  end
+
   def headers
     { 'D360-API-KEY': current_user.organization.provider_api_key }
   end
