@@ -53,7 +53,7 @@ class ChatsController < ApplicationController
   def new_message
     return unless permitted_chat(@chat)
 
-    response = Whatsapp.call(current_user, @chat.lead.phone, params[:type], params[:message])
+    response = Whatsapp.call(current_user, @chat.lead.phone, params[:type], params[:message], params[:options])
 
     render response
   end
