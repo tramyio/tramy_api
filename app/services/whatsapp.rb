@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 
 class Whatsapp < ApplicationService
-  attr_reader :user, :to, :type, :message # to: @chat.lead.phone
+  attr_reader :user, :to, :type, :message, :options # to: @chat.lead.phone
 
   # rubocop:disable Lint/MissingSuper
-  def initialize(user, to, type, message)
+  def initialize(user, to, type, message, options = {})
     @user = user
     @to = to
     @type = type
     @message = message
+    @options = options
   end
   # rubocop:enable Lint/MissingSuper
 
@@ -30,18 +31,35 @@ class Whatsapp < ApplicationService
   end
 
   def formatted_lead_message
-    { id: JSON.parse(whatsapp_api_response.body)['messages'][0]['id'],
-      from: user.email || 'Desconocido',
-      text: { body: message },
-      type: type || 'text',
-      timestamp: Time.now.to_i.to_s }
+    case type
+    when 'text'
+      { id: JSON.parse(whatsapp_api_response.body)['messages'][0]['id'],
+        from: user.email || 'Desconocido',
+        text: { body: message },
+        type: 'text',
+        timestamp: Time.now.to_i.to_s }
+    when 'template'
+      { id: JSON.parse(whatsapp_api_response.body)['messages'][0]['id'],
+        from: user.email || 'Desconocido',
+        template: { body: options[:template] },
+        type: 'template',
+        timestamp: Time.now.to_i.to_s }
+    else
+      {
+        id: 'type_error',
+        from: user.email || 'Desconocido',
+        text: { body: 'Este mensaje no se enviará a tu cliente, contacta a soporte@tramy.io' },
+        type: 'text',
+        timestamp: Time.now.to_i.to_s
+      }
+    end
   end
 
   def whatsapp_api_response
     @whatsapp_api_response ||= HTTParty.post(
       'https://waba.360dialog.io/v1/messages',
       headers: headers,
-      body: payload.to_json
+      body: payload(type).to_json
     )
   end
 
@@ -50,14 +68,23 @@ class Whatsapp < ApplicationService
       'D360-API-KEY': user.organization.provider_api_key }
   end
 
-  def payload
-    {
-      recipient_type: 'individual',
-      to: to,
-      type: type || 'text',
-      text: {
-        body: message
+  def payload(type)
+    case type
+    when 'text'
+      {
+        recipient_type: 'individual',
+        to: to,
+        type: 'text',
+        text: {
+          body: message
+        }
       }
-    }
+    when 'template'
+      {
+        to: to,
+        type: 'template',
+        template: message
+      }
+    end
   end
 end
