@@ -2,7 +2,7 @@
 
 class LeadSerializer
   include JSONAPI::Serializer
-  attributes :name, :email, :phone, :stage, :attended_by, :created_at, :organization_id
+  attributes :name, :id_number, :email, :phone, :stage, :attended_by, :created_at, :organization_id
 
   attribute :attended_by do |object|
     object&.chat&.account&.user&.profile
