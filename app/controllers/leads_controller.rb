@@ -11,7 +11,7 @@ class LeadsController < ApplicationController
     else
       query = params[:query].to_s.downcase
       @leads = @organization.leads
-                            .where('lower(name) LIKE :query or lower(email) LIKE :query or phone LIKE :query',
+                            .where('lower(name) LIKE :query or lower(email) LIKE :query or phone LIKE :query or lower(id_number) LIKE :query',
                                    query: "%#{query}%").recently_created
     end
 
@@ -61,7 +61,8 @@ class LeadsController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def lead_params
-    params.require(:lead).permit(:stage_id, :name, :email, :phone,
-                                 :organization_id).with_defaults(organization_id: current_user.organization.id)
+    params.require(:lead)
+          .permit(:stage_id, :name, :id_number, :email, :phone, :organization_id)
+          .with_defaults(organization_id: current_user.organization.id)
   end
 end
