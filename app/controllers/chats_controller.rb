@@ -53,7 +53,7 @@ class ChatsController < ApplicationController
   def new_message
     return unless permitted_chat(@chat)
 
-    response = Whatsapp.call(current_user, @chat.lead.phone, params[:type], params[:message])
+    response = Whatsapp.call(current_user, @chat.lead.phone, params[:type], params[:message], params[:options])
 
     render response
   end
@@ -82,6 +82,11 @@ class ChatsController < ApplicationController
       headers: headers
     )
     send_data @media.body, type: @media.content_type
+  end
+
+  def list_templates
+    @templates = HTTParty.get('https://waba.360dialog.io/v1/configs/templates', headers: headers)
+    render json: @templates
   end
 
   def headers
