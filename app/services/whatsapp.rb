@@ -33,17 +33,17 @@ class Whatsapp < ApplicationService
   def formatted_lead_message
     case type
     when 'text'
-      { id: JSON.parse(whatsapp_api_response.body)['messages'][0]['id'],
-        from: user.email || 'Desconocido',
-        text: { body: message },
-        type: 'text',
-        timestamp: Time.now.to_i.to_s }
+      base_lead_message.merge!(
+        {
+          text: { body: message }
+        }
+      )
     when 'template'
-      { id: JSON.parse(whatsapp_api_response.body)['messages'][0]['id'],
-        from: user.email || 'Desconocido',
-        template: { body: options[:template] },
-        type: 'template',
-        timestamp: Time.now.to_i.to_s }
+      base_lead_message.merge!(
+        {
+          template: { body: options[:template] }
+        }
+      )
     else
       {
         id: 'type_error',
@@ -53,6 +53,13 @@ class Whatsapp < ApplicationService
         timestamp: Time.now.to_i.to_s
       }
     end
+  end
+
+  def base_lead_message
+    { id: JSON.parse(whatsapp_api_response.body)['messages'][0]['id'],
+      from: user.email || 'Desconocido',
+      type: type,
+      timestamp: Time.now.to_i.to_s }
   end
 
   def whatsapp_api_response
