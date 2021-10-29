@@ -24,44 +24,6 @@ class Whatsapp < ApplicationService
     end
   end
 
-  def updated_lead_messages
-    lead = Lead.find_by(phone: to, organization: user.organization)
-
-    lead.update_messages!(formatted_lead_message)
-  end
-
-  def formatted_lead_message
-    case type
-    when 'text'
-      base_lead_message.merge!(
-        {
-          text: { body: message }
-        }
-      )
-    when 'template'
-      base_lead_message.merge!(
-        {
-          template: { body: options[:template] }
-        }
-      )
-    else
-      {
-        id: 'type_error',
-        from: user.email || 'Desconocido',
-        text: { body: 'Este mensaje no se enviará a tu cliente, contacta a soporte@tramy.io' },
-        type: 'text',
-        timestamp: Time.now.to_i.to_s
-      }
-    end
-  end
-
-  def base_lead_message
-    { id: JSON.parse(whatsapp_api_response.body)['messages'][0]['id'],
-      from: user.email || 'Desconocido',
-      type: type,
-      timestamp: Time.now.to_i.to_s }
-  end
-
   def whatsapp_api_response
     @whatsapp_api_response ||= HTTParty.post(
       'https://waba.360dialog.io/v1/messages',
@@ -92,6 +54,56 @@ class Whatsapp < ApplicationService
         type: 'template',
         template: message
       }
+    when 'image'
+      {
+        to: to,
+        type: 'image',
+        image: message
+      }
     end
+  end
+
+  def updated_lead_messages
+    lead = Lead.find_by(phone: to, organization: user.organization)
+
+    lead.update_messages!(formatted_lead_message)
+  end
+
+  def formatted_lead_message
+    case type
+    when 'text'
+      base_lead_message.merge!(
+        {
+          text: { body: message }
+        }
+      )
+    when 'template'
+      base_lead_message.merge!(
+        {
+          template: { body: options[:template] } # TODO: Remove dependancy of options
+        }
+      )
+    when 'image'
+      base_lead_message.merge!(
+        {
+          image: message
+        }
+      )
+    else
+      {
+        id: 'type_error',
+        from: user.email || 'Desconocido',
+        text: { body: 'Este mensaje no se enviará a tu cliente, contacta a soporte@tramy.io' },
+        type: 'text',
+        timestamp: Time.now.to_i.to_s
+      }
+    end
+  end
+
+  def base_lead_message
+    { id: JSON.parse(whatsapp_api_response.body)['messages'][0]['id'],
+      from: user.email || 'Desconocido',
+      type: type,
+      timestamp: Time.now.to_i.to_s }
   end
 end
