@@ -4,7 +4,7 @@ class ChatsController < ApplicationController
   # TODO: Destroy chat should not delete chat per se, should only delete list of messages
   # TODO: Create a method that decides if it will send a new_message or will open_conversation
 
-  before_action :set_chat, only: %i[show update new_message list_notes append_note destroy]
+  before_action :set_chat, only: %i[show update new_message list_notes append_note upload_file destroy]
 
   def index
     @chats = if params[:query].blank?
@@ -91,6 +91,18 @@ class ChatsController < ApplicationController
 
   def headers
     { 'D360-API-KEY': current_user.organization.provider_api_key }
+  end
+
+  def upload_file
+    whatsapp_api_image_response = HTTParty.post(
+      'https://waba.360dialog.io/v1/media',
+      headers: { 'Content-Type': params[:file].content_type, 'D360-API-KEY': current_user.organization.provider_api_key },
+      body: params[:file].read,
+      multipart: true
+    )
+    file_id = JSON.parse(whatsapp_api_image_response.body)['media'][0]['id']
+    response = Whatsapp.call(current_user, @chat.lead.phone, 'image', { id: file_id }, params[:options])
+    render response
   end
 
   def permitted_chat(chat)
