@@ -60,6 +60,12 @@ class Whatsapp < ApplicationService
         type: 'image',
         image: message
       }
+    when 'document'
+      {
+        to: to,
+        type: 'document',
+        document: message
+      }
     end
   end
 
@@ -87,6 +93,12 @@ class Whatsapp < ApplicationService
       base_lead_message.merge!(
         {
           image: message
+        }
+      )
+    when 'document'
+      base_lead_message.merge!(
+        {
+          document: message
         }
       )
     else

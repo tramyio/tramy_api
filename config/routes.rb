@@ -43,6 +43,7 @@ Rails.application.routes.draw do
   post 'chats/:id/notes', to: 'chats#append_note' # Chat (Get notes)
   get 'templates', to: 'chats#list_templates'
   post 'chats/:id/upload_file', to: 'chats#upload_file'
+  post 'chats/:id/upload_document', to: 'chats#upload_document'
 
   # Account
   get 'accounts', to: 'accounts#index' # Team / Chat (List of agents)
