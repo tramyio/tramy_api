@@ -4,8 +4,7 @@ class ChatsController < ApplicationController
   # TODO: Destroy chat should not delete chat per se, should only delete list of messages
   # TODO: Create a method that decides if it will send a new_message or will open_conversation
 
-  before_action :set_chat, only: %i[show update new_message list_notes append_note
-                                    upload_file upload_document destroy]
+  before_action :set_chat, only: %i[show update new_message upload_file upload_document destroy]
 
   def index
     @chats = if params[:query].blank?
@@ -57,20 +56,6 @@ class ChatsController < ApplicationController
     response = Whatsapp.call(current_user, @chat.lead.phone, params[:type], params[:message], params[:options])
 
     render response
-  end
-
-  def list_notes
-    # TODO: Add Pundit
-    render json: NoteSerializer.new(@chat.notes).serializable_hash[:data]
-  end
-
-  def append_note
-    note = Note.new(content: params[:content], chat: @chat)
-    if note.save
-      render json: note, status: :created
-    else
-      render json: I18n.t('chat.note.failed'), status: :unprocessable_entity
-    end
   end
 
   def open_conversation
