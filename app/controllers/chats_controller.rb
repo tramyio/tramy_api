@@ -110,7 +110,8 @@ class ChatsController < ApplicationController
   def upload_document
     whatsapp_api_image_response = HTTParty.post(
       'https://waba.360dialog.io/v1/media',
-      headers: { 'Content-Type': 'application/pdf', 'D360-API-KEY': current_user.organization.provider_api_key },
+      headers: { 'Content-Type': params[:file].content_type,
+                 'D360-API-KEY': current_user.organization.provider_api_key },
       body: params[:file].read,
       multipart: true
     )
