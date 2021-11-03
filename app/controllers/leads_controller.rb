@@ -62,7 +62,7 @@ class LeadsController < ApplicationController
   # Only allow a trusted parameter "white list" through.
   def lead_params
     params.require(:lead)
-          .permit(:stage_id, :name, :id_number, :email, :phone, :organization_id)
+          .permit(:stage_id, :name, :id_number, :email, :phone, :organization_id, :note_data)
           .with_defaults(organization_id: current_user.organization.id)
   end
 end

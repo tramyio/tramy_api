@@ -4,7 +4,7 @@ class ChatsController < ApplicationController
   # TODO: Destroy chat should not delete chat per se, should only delete list of messages
   # TODO: Create a method that decides if it will send a new_message or will open_conversation
 
-  before_action :set_chat, only: %i[show update new_message upload_file upload_document destroy]
+  before_action :set_chat, only: %i[show update new_message list_notes append_note upload_file upload_document destroy]
 
   def index
     @chats = if params[:query].blank?
@@ -60,6 +60,16 @@ class ChatsController < ApplicationController
 
   def open_conversation
     # TODO: Method open conversation when 24-hour window has been closed.
+  end
+
+  def list_notes
+    @chat.lead.update!(note_data: { 'notes': [] }) if @chat.lead.note_data.nil?
+    render json: @chat.lead.note_data
+  end
+
+  def append_note
+    @chat.lead.update_notes!(params[:note], current_user.email)
+    render json: 'Note was posted', status: :created
   end
 
   def retrieve_media
