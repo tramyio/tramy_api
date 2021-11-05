@@ -36,4 +36,11 @@ class Lead < ApplicationRecord
   def update_status_message(message_id, status)
     chat.chat_data['messages'].find { |msg| msg['id'] == message_id }['status'] = status
   end
+
+  def update_notes!(content, author)
+    new_note = { content: content, author: author, timestamp: Time.now.to_i.to_s }
+    update!(note_data: { "notes": [] }) if note_data.nil?
+    note_data['notes'] << new_note
+    save
+  end
 end
