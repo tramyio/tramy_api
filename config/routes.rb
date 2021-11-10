@@ -51,4 +51,6 @@ Rails.application.routes.draw do
   # Media retrieve ("proxy-like")
   get 'retrieve_media/:media_id', to: 'chats#retrieve_media'
 
+  # Analytics
+  get 'analytics', to: 'analytics#index'
 end
