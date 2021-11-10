@@ -15,7 +15,11 @@ class Chat < ApplicationRecord
 
   # end
 
-  # def last_lead_message
+  def first_agent_message
+    chat_data['messages'].find { |message| message['from'].include?('@') }
+  end
 
-  # end
+  def first_lead_message
+    chat_data['messages'].find { |message| !message['from'].include?('@') }
+  end
 end
